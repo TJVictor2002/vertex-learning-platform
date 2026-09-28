@@ -1,7 +1,33 @@
 import Link from "next/link";
-import { Bell, User } from "lucide-react";
+import { Bell } from "lucide-react";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Logo } from "@/components/ui/Logo";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+
+function AccountControls() {
+  return (
+    <>
+      <Show when="signed-out">
+        <div className="flex items-center gap-4">
+          <SignInButton>
+            <Button variant="tertiary" size="md">
+              Sign in
+            </Button>
+          </SignInButton>
+          <SignUpButton>
+            <Button variant="primary" size="md">
+              Sign up
+            </Button>
+          </SignUpButton>
+        </div>
+      </Show>
+      <Show when="signed-in">
+        <UserButton />
+      </Show>
+    </>
+  );
+}
 
 const links = [
   { href: "/courses", label: "Courses" },
@@ -43,13 +69,7 @@ export function Navbar({ variant = "default" }: { variant?: "default" | "home" }
             >
               <Bell className="size-5" />
             </button>
-            <span
-              role="img"
-              aria-label="Your profile"
-              className="flex size-10 items-center justify-center rounded-full bg-neutral-200 text-neutral-500 md:size-[52px]"
-            >
-              <User className="size-5" />
-            </span>
+            <AccountControls />
           </div>
         </>
       ) : (
@@ -58,6 +78,7 @@ export function Navbar({ variant = "default" }: { variant?: "default" | "home" }
             <Logo />
           </Link>
           <nav className="flex items-center gap-6">{navLinks}</nav>
+          <AccountControls />
         </>
       )}
     </header>
